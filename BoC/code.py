@@ -114,6 +114,7 @@ def apply_lighting_effect(image, mask, gamma=0.7):
 #         cv2.imwrite(out_path, output_img)
 #         print(f"✅ Saved {out_path}")
 
+"""
 
 input_base = "../../Dataset/gt"
 output_base = "../../Dataset"
@@ -176,3 +177,4 @@ for split in splits:
 
             cv2.imwrite(out_path, output_img)
             print(f"✔ Saved: {out_path}")
+"""
