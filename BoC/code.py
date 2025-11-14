@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import os
 import random
-
+#edit from lab
 def generate_composite_mask(height, width, scenario='radial', center=None, corner=0, direction='left-to-right',
                             sharpness_params={'gaussian': 0.4, 'sigmoid': 0.2, 'power': 0.5},
                             weights={'gaussian': 0.34, 'sigmoid': 0.33, 'power': 0.33},
