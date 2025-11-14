@@ -64,7 +64,7 @@ def generate_composite_mask(height, width, scenario='radial', center=None, corne
     composite_mask = (composite_mask - min_val) / (max_val - min_val + 1e-8)
 
     # nonlinear boost
-    composite_mask = composite_mask ** 1.5
+    composite_mask = composite_mask ** 1.2
     composite_mask = 0.2 + 1.8 * composite_mask
     composite_mask = np.clip(composite_mask, 0, 2.0)
 
@@ -86,8 +86,8 @@ def apply_lighting_effect(image, mask, gamma=0.7):
 
 
 # --- Main pipeline ---
-input_folder = "./images"
-output_base = "./output"
+input_folder = "../Dataset/images"
+output_base = "../Dataset/output"
 os.makedirs(output_base, exist_ok=True)
 
 scenarios = ["radial", "corner", "linear"]
