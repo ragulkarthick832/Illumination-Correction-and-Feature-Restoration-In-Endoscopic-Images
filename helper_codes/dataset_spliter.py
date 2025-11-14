@@ -2,8 +2,8 @@ import os
 import shutil
 from sklearn.model_selection import train_test_split
 
-input_folder = "../Dataset/images"
-output_base = "../Dataset/"
+input_folder = "../../Dataset/images"
+output_base = "../../Dataset/gt"
 
 # Create split folders
 for split in ["train", "test", "validation"]:
