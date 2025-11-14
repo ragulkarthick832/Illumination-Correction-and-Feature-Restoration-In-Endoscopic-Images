@@ -85,80 +85,94 @@ def apply_lighting_effect(image, mask, gamma=0.7):
     return gamma_corrected_image
 
 
-# --- Main pipeline ---
-input_folder = "../Dataset/images"
-output_base = "../Dataset/output"
-os.makedirs(output_base, exist_ok=True)
+# # --- Main pipeline ---
+# input_folder = "../../Dataset/gt"
+# output_base = "../Dataset/output"
+# os.makedirs(output_base, exist_ok=True)
 
+# scenarios = ["radial", "corner", "linear"]
+# for scenario in scenarios:
+#     os.makedirs(os.path.join(output_base, scenario), exist_ok=True)
+
+# image_files = [f for f in os.listdir(input_folder) if f.lower().endswith((".jpg", ".png", ".jpeg"))]
+# image_files = sorted(image_files)  # process all images
+
+# for filename in image_files:
+#     img_path = os.path.join(input_folder, filename)
+#     image = cv2.imread(img_path)
+#     if image is None:
+#         print(f"⚠️ Could not read {filename}, skipping...")
+#         continue
+#     H, W, _ = image.shape
+
+#     base_name, ext = os.path.splitext(filename)
+#     for scenario in scenarios:
+#         mask = generate_composite_mask(H, W, scenario=scenario)
+#         output_img = apply_lighting_effect(image, mask, gamma=0.7)
+
+#         out_path = os.path.join(output_base, scenario, f"{base_name}_{scenario}.jpg")
+#         cv2.imwrite(out_path, output_img)
+#         print(f"✅ Saved {out_path}")
+
+
+input_base = "../../Dataset/gt"
+output_base = "../../Dataset"
+
+splits = ["train", "test", "validation"]
 scenarios = ["radial", "corner", "linear"]
+
+# ---------------------------------------------------------------------
+# NEW: Create output folder structure
+# ---------------------------------------------------------------------
+
 for scenario in scenarios:
-    os.makedirs(os.path.join(output_base, scenario), exist_ok=True)
+    for split in splits:
+        os.makedirs(os.path.join(output_base, scenario, split), exist_ok=True)
 
-image_files = [f for f in os.listdir(input_folder) if f.lower().endswith((".jpg", ".png", ".jpeg"))]
-image_files = sorted(image_files)  # process all images
+# ---------------------------------------------------------------------
+# PROCESS EACH SPLIT (train/test/validation)
+# ---------------------------------------------------------------------
 
-for filename in image_files:
-    img_path = os.path.join(input_folder, filename)
-    image = cv2.imread(img_path)
-    if image is None:
-        print(f"⚠️ Could not read {filename}, skipping...")
-        continue
-    H, W, _ = image.shape
+for split in splits:
 
-    base_name, ext = os.path.splitext(filename)
-    for scenario in scenarios:
-        mask = generate_composite_mask(H, W, scenario=scenario)
-        output_img = apply_lighting_effect(image, mask, gamma=0.7)
+    input_folder = os.path.join(input_base, split)
+    image_files = sorted([
+        f for f in os.listdir(input_folder)
+        if f.lower().endswith((".jpg", ".png", ".jpeg"))
+    ])
 
-        out_path = os.path.join(output_base, scenario, f"{base_name}_{scenario}.jpg")
-        cv2.imwrite(out_path, output_img)
-        print(f"✅ Saved {out_path}")
+    print(f"\nProcessing split: {split} ({len(image_files)} images)")
 
+    for filename in image_files:
 
+        img_path = os.path.join(input_folder, filename)
+        image = cv2.imread(img_path)
 
+        if image is None:
+            print(f"⚠️ Could not read {filename}, skipping...")
+            continue
 
+        H, W, _ = image.shape
+        base_name, ext = os.path.splitext(filename)
 
+        # ---------------------------------------------------------------------
+        # For each scenario (radial / corner / linear)
+        # ---------------------------------------------------------------------
+        for scenario in scenarios:
 
+            # create illumination mask
+            mask = generate_composite_mask(H, W, scenario=scenario)
 
+            # apply uneven illumination
+            output_img = apply_lighting_effect(image, mask, gamma=0.7)
 
+            # output location:
+            out_path = os.path.join(
+                output_base,
+                scenario,
+                split,
+                f"{base_name}_{scenario}.jpg"
+            )
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            cv2.imwrite(out_path, output_img)
+            print(f"✔ Saved: {out_path}")
