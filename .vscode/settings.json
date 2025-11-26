@@ -1,0 +1,6 @@
+{
+    "python.analysis.extraPaths": [
+        "./LighTDiff/BasicSR-light",
+        "./LighTDiff/LighTDiff"
+    ]
+}
